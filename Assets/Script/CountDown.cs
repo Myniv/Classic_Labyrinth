@@ -10,7 +10,7 @@ public class CountDown : MonoBehaviour
 
     public UnityEvent OnCountFinished = new UnityEvent();
     public UnityEvent<int> OnCount = new UnityEvent<int>();
-    bool isCounting;
+    public bool isCounting;
     Coroutine countCoroutine;
 
 
