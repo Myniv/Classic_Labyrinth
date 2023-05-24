@@ -9,6 +9,7 @@ public class PlayManager : MonoBehaviour
     [SerializeField] TMP_Text finishedText;
 
     int coin = 100; //TODO
+    [SerializeField] int level;
 
     public void GameOver(){
         finishedText.text = "You Failed";
@@ -18,6 +19,10 @@ public class PlayManager : MonoBehaviour
     public void PlayerWin(){
         finishedText.text = "You Win\nScore:" + GetScore();
         finishedCanvas.SetActive(true); 
+        var checkLevelPlayerprefs = PlayerPrefs.GetInt("LevelDone");
+        if(checkLevelPlayerprefs<level){
+            PlayerPrefs.SetInt("LevelDone",level);
+        }
     }
 
     private int GetScore(){
