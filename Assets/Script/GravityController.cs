@@ -6,7 +6,7 @@ public class GravityController : MonoBehaviour
 {
     [SerializeField] float acceleration = 9.8f;
 
-    Vector3 gravityOffset = Vector3.zero;
+    Quaternion gravityOffset = Quaternion.identity;
 
     bool isActive = true;
     void Start()
@@ -20,8 +20,9 @@ public class GravityController : MonoBehaviour
     void Update()
     {
         if(isActive){
-
-        Physics.gravity = GetGravityFromSensor() + gravityOffset;
+        //Basic rotate menggunakan quaternion harus dikaliban sebelah kiri
+        //Memutar gravity offset sejauh getgravity from sensor
+        Physics.gravity = gravityOffset *  GetGravityFromSensor();
         }
         else{
             Physics.gravity = Vector3.zero;
@@ -30,7 +31,7 @@ public class GravityController : MonoBehaviour
 
     public void CaliibrateGravity()
     {
-        gravityOffset = Vector3.down * acceleration - GetGravityFromSensor();
+        gravityOffset = Quaternion.FromToRotation(GetGravityFromSensor(),Vector3.down * acceleration);
     }
 
     public Vector3 GetGravityFromSensor()

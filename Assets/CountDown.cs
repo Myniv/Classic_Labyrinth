@@ -11,29 +11,59 @@ public class CountDown : MonoBehaviour
     public UnityEvent OnCountFinished = new UnityEvent();
     public UnityEvent<int> OnCount = new UnityEvent<int>();
     bool isCounting;
-    public void StartCount(){
-        if(isCounting==true){
-            return;
-        } else{
-            isCounting=true;
-        }
+    Coroutine countCoroutine;
 
-        var seq = DOTween.Sequence();
-        int duration = Mathf.FloorToInt(this.duration);
-        OnCount.Invoke(duration);
-        for (int i = duration; i >= 0; i++)
+
+    public void StartCount(){ 
+
+        if (isCounting==true)
         {
-            seq.Append(transform
-                .DOMove(this.transform.position,1)
-                .SetUpdate(true)
-                .OnComplete(()=>OnCount.Invoke(i)));
+        // //Cara memberhentikan coroutine 
+            StopCoroutine(countCoroutine);
         }
-        seq.Append(transform
-                .DOMove(this.transform.position,1))
-                .SetUpdate(true);
-
-        OnCountFinished.Invoke();
-                
+        countCoroutine = StartCoroutine(CountCoroutine());
 
     }
+
+    private IEnumerator CountCoroutine()
+    {
+        isCounting=true;
+        for (int i = 0; i < duration; i++)
+        {
+            OnCount.Invoke(i);
+            yield return new WaitForSecondsRealtime(1);
+        }
+        isCounting = false;
+        OnCountFinished.Invoke();
+    }
+
+    // //CountDown with DoTween
+    // public void StartCount(){
+    //     if(isCounting==true){
+    //         return;
+    //     } else{
+    //         isCounting=true;
+    //     }
+    //     DOTween.Kill(this.transform);
+
+    //     var seq = DOTween.Sequence();
+    //     int duration = Mathf.FloorToInt(this.duration);
+    //     OnCount.Invoke(duration);
+    //     for (int i = duration; i >= 0; i++)
+    //     {
+    //         var coount = i;
+    //         seq.Append(transform
+    //             .DOMove(this.transform.position,1)
+    //             .SetUpdate(true)
+    //             .OnComplete(()=>OnCount.Invoke(coount)));
+    //     }
+    //     seq.Append(transform
+    //             .DOMove(this.transform.position,1))
+    //             .SetUpdate(true)
+    //             .OnComplete(()=>{
+    //                 isCounting=false;
+    //                 OnCountFinished.Invoke();
+    //                 }
+    //             );
+    // }
 }
