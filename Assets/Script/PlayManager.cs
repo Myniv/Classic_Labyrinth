@@ -16,10 +16,17 @@ public class PlayManager : MonoBehaviour
 
     [SerializeField] UnityEvent OnStart;
 
+    bool gameOver=false;
+    public bool GameOver1 { get => gameOver;}
+    
+
+    private bool stopTimer;
+
     private void Start()
     {
         OnStart.Invoke();
         gravityController.SetActiveCallibration(false);
+        gameOver=false;
     }
 
     public void GameOver()
@@ -27,7 +34,8 @@ public class PlayManager : MonoBehaviour
         finishedText.text = "You Failed";
         finishedCanvas.SetActive(true);
         gravityController.SetActiveCallibration(false);
-
+        gameOver=true;
+        
     }
 
     public void PlayerWin()
@@ -45,8 +53,8 @@ public class PlayManager : MonoBehaviour
 
     [SerializeField] TMP_Text TimerText;
     [SerializeField] int SetWaktu = 10;
-    // private int WaktuMundur;
     float sec;
+
 
     void SetText()
     {
@@ -56,8 +64,10 @@ public class PlayManager : MonoBehaviour
 
     private void Update()
     {
-        if (countDown.isCounting == false)
+        if (countDown.isCounting == true || stopTimer==true)
         {
+            return;
+        } else{
             gravityController.SetActiveCallibration(true);
             SetText();
             sec += Time.deltaTime;
@@ -74,4 +84,10 @@ public class PlayManager : MonoBehaviour
             }
         }
     }
+
+    public void StopTimer(bool value){
+        stopTimer=value;
+    }    
+    
+    
 }

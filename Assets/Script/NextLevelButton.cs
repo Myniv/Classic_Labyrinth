@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class NextLevelButton : MonoBehaviour
 {
+    [SerializeField] PlayManager playManager;
     private void OnEnable() {
         //Check next scene kalau tidak ada, sembunyikan button ini
         var currentScene = SceneManager.GetActiveScene();
@@ -13,6 +14,13 @@ public class NextLevelButton : MonoBehaviour
 
         var nextSceneBuildIndex = SceneUtility.GetBuildIndexByScenePath("Level " + nextLevel);
         if(nextSceneBuildIndex == -1){
+            this.gameObject.SetActive(false);
+        }
+    }
+
+    private void Start() {
+        var gameOver=playManager.GameOver1;
+        if(gameOver==true){
             this.gameObject.SetActive(false);
         }
     }
